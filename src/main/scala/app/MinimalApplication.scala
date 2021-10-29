@@ -2,9 +2,28 @@ package app
 import scalatags.Text.all._
 
 object MinimalApplication extends cask.MainRoutes{
+  var messages = Vector(
+    ("alice", "Hello World!"),
+    ("bob", "I am cow, hear me moo"),
+    ("charlie", "I weigh twice as you"),
+  )
+
+  @cask.postForm("/")
+  def postHello(name: String, msg: String) = {
+    if (name == "") hello(Some("Name cannot be empty"), Some(name), Some(msg))
+    else if (name.length >= 10) hello(Some("Name cannot be longer than 10 characters"), Some(name), Some(msg))
+    else if (msg == "") hello(Some("Message cannot be empty"), Some(name), Some(msg))
+    else if (msg.length >= 160) hello(Some("Message cannot be longer than 160 characters"), Some(name), Some(msg))
+    else {
+      messages = messages :+ (name -> msg)
+      hello(None, Some(name), None)
+    }
+  }
 
   @cask.get("/")
-  def hello() = {
+  def hello(errorOpt: Option[String] = None,
+            userName: Option[String] = None,
+            msg: Option[String] = None) = {
     html(
       head(
         link(
@@ -17,19 +36,34 @@ object MinimalApplication extends cask.MainRoutes{
           h1("Scala Chat!"),
           hr,
           div(
-            p(b("alice"), " ", "Hello World!"),
-            p(b("bob"), " ", "I am cow, hear me moo"),
-            p(b("charlie"), " ", "I weigh twice as much as you")
+            for((name, msg) <- messages)
+            yield p(b(name), " ", msg)
           ),
           hr,
-          div(
-            input(`type` := "text", placeholder := "User name", width := "20%"),
-            input(`type` := "text", placeholder := "Please write a message!", width := "80%")
+          for(error <- errorOpt)
+          yield i(color.red)(error),
+          form(action := "/", method := "post")(
+            input(
+              `type` := "text",
+              name := "name",
+              placeholder := "User name",
+              width := "20%",
+              userName.map(value := _)
+            ),
+            input(
+              `type` := "text",
+              name := "msg",
+              placeholder := "Please write a message!",
+              width := "60%",
+              msg.map(value := _)
+            ),
+            input(`type` := "submit", width := "20%")
           )
         )
       )
-    )
+    ).render
   }
 
   initialize()
 }
+
