@@ -29,7 +29,27 @@ object MinimalApplication extends cask.MainRoutes{
         link(
           rel := "stylesheet",
           href := "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        )
+       ),
+       script(raw("""
+          function submitForm(){
+            fetch(
+              "/",
+              {
+                method: "POST",
+                body: JSON.stringify({name: nameInput.value, msg: msgInput.value})
+              }
+            ).then(response => response.json())
+             .then(json => {
+              if (json.success) {
+                messageList.innerHTML = json.txt
+                msgInput.value = ""
+                errorDiv.innerText = ""
+              } else {
+                errorDiv.innerText = json.txt
+              }
+            })
+          }
+        """))
       ),
       body(
         div(cls := "container")(
@@ -40,19 +60,18 @@ object MinimalApplication extends cask.MainRoutes{
             yield p(b(name), " ", msg)
           ),
           hr,
-          for(error <- errorOpt)
-          yield i(color.red)(error),
-          form(action := "/", method := "post")(
+          div(id := "errorDiv", color.red),
+          form(onsubmit := "submitForm(); return false")(
             input(
               `type` := "text",
-              name := "name",
+              id := "nameInput",
               placeholder := "User name",
               width := "20%",
               userName.map(value := _)
             ),
             input(
               `type` := "text",
-              name := "msg",
+              id := "msgInput",
               placeholder := "Please write a message!",
               width := "60%",
               msg.map(value := _)
