@@ -53,6 +53,37 @@ object MinimalApplication extends cask.MainRoutes{
     )
   }
 
+  @cask.get("/signin")
+  def signIn() = {
+    html(
+      head(
+        link(
+          rel := "stylesheet",
+          href := "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        )
+      ),
+      body(
+        h1("Signin Page"),
+        hr,
+        form(action:= "/AlustaLuoKayttaja", method := "post")(
+          div(
+            input(name := "userName", `type` := "text", placeholder := "Username", width := "20%")
+          ),
+          div(
+            input(name := "password", `type` := "password", placeholder := "Password", width := "20%")
+          ),
+          input(`type` := "submit", width := "10%")
+        )
+      )
+    )
+  }
+
+  @cask.postForm("AlustaLuoKayttaja")
+  def luoKayttaja(userName: String, password: String) = {
+    Alusta.luoKäyttäjä(userName, password)
+    cask.Redirect("/")
+  }
+
  initialize()
 
 }
