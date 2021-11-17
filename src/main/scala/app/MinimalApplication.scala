@@ -60,6 +60,10 @@ object MinimalApplication extends cask.MainRoutes{
       )
   }
 
+  def kirjaudusiään() = {
+    Alusta.kirjaudu("username","password" )
+    cask.Redirect("/")
+  }
 
 
   @cask.get("/Prices")
