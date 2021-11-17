@@ -13,9 +13,19 @@ object MinimalApplication extends cask.MainRoutes{
       head("Fa$Ebay"),
       body(
        h1("Welcome to Fa$Ebay"),
-      p("log in")
-
-    )
+        if (Alusta.kirjautunutKäyttäjä.isDefined) {
+          p("User: " + Alusta.kirjautunutKäyttäjä.get.username,
+              a(href := "/kirjauduulos","Kirjaudu ulos")
+          )
+        } else {
+          p("You are not logged in.  ",
+              a(href := "/kirjaudusisään","Log in"),
+          p("If you haven't already created an user, ",
+              a(href := "/luouusi", "create it now.")
+            )
+            )
+        }
+      )
       , form(action:= "/", method := "pos")(
         select(id:= "korut-valitse", name:="korut"),
           option("valitse ", value:="")),
@@ -25,7 +35,11 @@ object MinimalApplication extends cask.MainRoutes{
 
   }
 
-
+  @cask.get("/kirjauduulos")
+  def kirjauduulos() = {
+    Alusta.kirjauduUlos()
+    cask.Redirect("/")
+  }
 
   @cask.get("/Prices")
   def korujentiedot() = {
