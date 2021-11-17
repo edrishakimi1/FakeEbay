@@ -4,14 +4,16 @@ import collection.mutable.Buffer
 
 object MinimalApplication extends cask.MainRoutes{
 
+ val Alusta = new Alusta
+
 
   @cask.get("/")
   def hello() = {
     html(
-      head("NICE TO SEE YOU"),
+      head("Fa$Ebay"),
       body(
-       h1("Welcome to our JEWELRY SHOP"),
-      p("We sell  jewelry at a good price and our prices can be found when you inject / Prices")
+       h1("Welcome to Fa$Ebay"),
+      p("log in")
 
     )
       , form(action:= "/", method := "pos")(
