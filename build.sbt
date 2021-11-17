@@ -11,6 +11,7 @@ javaOptions ++= Seq("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED")
 // Run dependencies
 libraryDependencies += "com.lihaoyi" % "cask_2.13" % "0.6.2"
 libraryDependencies += "com.lihaoyi" % "scalatags_2.13" % "0.9.2"
+libraryDependencies += "com.outr" %% "hasher" % "1.2.2"
 
 // Test dependencies
 libraryDependencies += "com.lihaoyi" % "utest_2.13" % "0.7.5" % "test"
