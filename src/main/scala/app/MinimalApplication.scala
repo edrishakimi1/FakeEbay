@@ -7,22 +7,57 @@ object MinimalApplication extends cask.MainRoutes{
  val Alusta = new Alusta
 
 
+
   @cask.get("/")
   def hello() = {
     html(
       head("Fa$Ebay"),
       body(
        h1("Welcome to Fa$Ebay"),
-      p("log in")
-
-    )
-      , form(action:= "/", method := "pos")(
+        if (Alusta.kirjautunutKäyttäjä.isDefined) {
+          p("User: " + Alusta.kirjautunutKäyttäjä.get.username,
+              a(href := "/kirjauduulos","Kirjaudu ulos")
+          )
+        } else {
+          p("You are not logged in.  ",
+              a(href := "/kirjaudusisään","Log in"),
+          p("If you haven't already created an user, ",
+              a(href := "/luouusi", "create it now.")
+            )
+            )
+        }
+      )
+      , form(action:= "/", method := "post")(
         select(id:= "korut-valitse", name:="korut"),
           option("valitse ", value:="")),
       option("please choose")
+
       )
 
 
+  }
+
+  @cask.get("/kirjauduulos")
+  def kirjauduulos() = {
+    Alusta.kirjauduUlos()
+    cask.Redirect("/")
+  }
+
+   @cask.get("/Login")
+  def Login() = {
+      html(
+      head("Login Page"),
+      body(
+    hr,
+
+          div(
+            input(`type` := "text", placeholder := "Username", width := "20%"),
+
+          ),
+
+        div(input(`type` := "text", placeholder := "Pasword", width := "20%"))
+      )
+      )
   }
 
 
@@ -37,6 +72,7 @@ object MinimalApplication extends cask.MainRoutes{
        //div(cls := "container")(
           ul(
             listaa.toSeq
+
 
     )
       )
