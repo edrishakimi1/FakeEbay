@@ -10,29 +10,25 @@ object MinimalApplication extends cask.MainRoutes{
   @cask.get("/")
   def hello() = {
     html(
-      head("Fa$Ebay"),
-      body(
-       h1("Welcome to Fa$Ebay"),
-        if (Alusta.kirjautunutKäyttäjä.isDefined) {
+      head(if (Alusta.kirjautunutKäyttäjä.isDefined) {
           p("User: " + Alusta.kirjautunutKäyttäjä.get.username,
               a(href := "/kirjauduulos","Kirjaudu ulos")
           )
         } else {
           p("You are not logged in.  ",
-              a(href := "/kirjaudusisään","Log in"),
+              a(href := "/login","Log in"),
           p("If you haven't already created an user, ",
-              a(href := "/luouusi", "create it now.")
-            )
-            )
-        }
-      )
-      , form(action:= "/", method := "pos")(
-        select(id:= "korut-valitse", name:="korut"),
-          option("valitse ", value:="")),
-      option("please choose")
-      )
+              a(href := "/signin", "create it now.")
+          )
+          )
+      }
+        ),
+      body(
+       h1("Welcome to Fa$Ebay"),
 
 
+      )
+    )
   }
 
   @cask.get("/kirjauduulos")
