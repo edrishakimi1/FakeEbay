@@ -11,8 +11,8 @@ object MinimalApplication extends cask.MainRoutes{
   def hello() = {
     html(
       head(if (Alusta.kirjautunutKäyttäjä.isDefined) {
-          p("User: " + Alusta.kirjautunutKäyttäjä.get.username + "   ",
-              a(href := "/kirjauduulos","Log out")
+          p("User: " + Alusta.kirjautunutKäyttäjä.get.username,
+              a(href := "/kirjauduulos","Kirjaudu ulos")
           )
         } else {
           p("You are not logged in.  ",
