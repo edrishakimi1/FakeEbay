@@ -84,6 +84,63 @@ object MinimalApplication extends cask.MainRoutes{
     cask.Redirect("/")
   }
 
+  
+  @cask.postForm("/kirjautusisaan")
+  def login(username: String, salansa: String) = {
+    if (Alusta.kirjaudu(username,salansa)) {
+      cask.Redirect("/")
+    } else {
+      cask.Redirect("/loginfailed")
+    }
+  }
+
+  @cask.get("/loginfailed")
+  def LoginFailed() = {
+      html(
+      head("Login Page"),
+      body(
+    hr,
+        p("This account doesn't exists"),
+        form( action := "/kirjautusisaan", method := "post")(
+          div(
+            input(name:="username", `type` := "text", placeholder := "Username", width := "20%"),
+
+          ),
+
+        div(
+     input(name:= "pasword",`type` := "text", placeholder := "Pasword", width := "20%")
+        ),
+     input(`type` := "submit", width := "20%")
+      )
+      )
+      )
+
+  }
+
+
+   @cask.get("/login")
+  def Login() = {
+      html(
+      head("Login Page"),
+      body(
+    hr,
+        form( action := "/kirjautusisaan", method := "post")(
+          div(
+            input(name:="username", `type` := "text", placeholder := "Username", width := "20%"),
+
+          ),
+
+        div(
+     input(name:= "pasword",`type` := "text", placeholder := "Pasword", width := "20%")
+        ),
+     input(`type` := "submit", width := "20%")
+      )
+      )
+      )
+
+  }
+
+
  initialize()
 
 }
