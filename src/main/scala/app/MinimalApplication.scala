@@ -126,7 +126,7 @@ object MinimalApplication extends cask.MainRoutes{
             input(name:="username", `type` := "text", placeholder := "Username", width := "20%"),
             ),
           div(
-             input(name:= "password",`type` := "text", placeholder := "Pasword", width := "20%")
+             input(name := "password", `type` := "password", placeholder := "Password", width := "20%")
             ),
         input(`type` := "submit", width := "20%")
       )
