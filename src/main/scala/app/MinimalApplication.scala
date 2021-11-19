@@ -26,17 +26,15 @@ object MinimalApplication extends cask.MainRoutes{
           )
       },
         meta(charset :="UTF-8"),
-          link(
-          rel := "stylesheet",
-          href := "/kuvia/tyyli.css"
-
+        /*link(
+          rel := "stylesheet"
+          */
         ),
       body(
        h2("Welcome to Fa$Ebay"),
         p("All items thatt are currently selling:"),
         p("placeholder"),
-        img(src := "/kuvia/ebay.png", cls := "ebay")
-      )
+        img(src := "/kuvia/ebay.png")
 
 
       )
