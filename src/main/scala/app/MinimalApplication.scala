@@ -32,12 +32,14 @@ object MinimalApplication extends cask.MainRoutes{
         ),
       body(
        h2("Welcome to Fa$Ebay"),
-        p("All items thatt are currently selling:"),
-        p("placeholder"),
-        img(src := "/kuvia/ebay.png", cls := "ebay")
+        img(src := "/kuvia/ebay.png", cls := "ebay"),
+        if (Alusta.kirjautunutKäyttäjä.isDefined) {
+          p("Create a ",
+              a(href := "/newauction", "new auction")
+          )
+        } else {},
+        p("All auctions:")
       )
-
-
       )
     )
   }
@@ -48,56 +50,41 @@ object MinimalApplication extends cask.MainRoutes{
     cask.Redirect("/")
   }
 
-  @cask.get("/Prices")
-  def korujentiedot() = {
-    val tiedot = Buffer("gold jewelry 800 Euro","silver jewelry 200 Euro","diamond jewelry 10000 Euro" )
-    val listaa = for(korut <- tiedot) yield li(korut)
-    html(
-      head(),
-      body(
-       //div(cls := "container")(
-          ul(
-            listaa.toSeq
-
-       )
-      )
-    )
-  }
 
   @cask.get("/signin")
   def signIn() = {
-    html(
-      head(
-        link(
-          rel := "stylesheet",
-          href := "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        )
-      ),
-      body(
-        div(cls := "container")(
-        h1("Signin Page"),
-        hr,
-        form(action:= "/AlustaLuoKayttaja", method := "post")(
-          div(
-            input(name := "userName", `type` := "text", placeholder := "Username", width := "50%")
-          ),
-          div(
-            input(name := "password", `type` := "password", placeholder := "Password", width := "50%")
-          ),
-          input(`type` := "submit", width := "20%")
-        )
+      html(
+        head(
+          link(
+            rel := "stylesheet",
+            href := "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          )
+        ),
+        body(
+          div(cls := "container")(
+          h1("Signin Page"),
+          hr,
+          form(action:= "/AlustaLuoKayttaja", method := "post")(
+            div(
+              input(name := "userName", `type` := "text", placeholder := "Username", width := "50%")
+            ),
+            div(
+              input(name := "password", `type` := "password", placeholder := "Password", width := "50%")
+            ),
+            input(`type` := "submit", width := "20%")
+          )
+          )
         )
       )
-    )
-  }
+    }
 
-  @cask.postForm("AlustaLuoKayttaja")
-  def luoKayttaja(userName: String, password: String) = {
-    Alusta.luoKäyttäjä(userName, password)
-    cask.Redirect("/")
-  }
+    @cask.postForm("AlustaLuoKayttaja")
+    def luoKayttaja(userName: String, password: String) = {
+      Alusta.luoKäyttäjä(userName, password)
+      cask.Redirect("/")
+    }
 
-  
+
   @cask.postForm("/kirjautusisaan")
   def login(username: String, password: String) = {
     if (Alusta.kirjaudu(username,password)) {
@@ -146,6 +133,42 @@ object MinimalApplication extends cask.MainRoutes{
     )
   )
   }
+
+    @cask.get("/newauction")
+  def uusiHuutokauppa() = {
+      html(
+        head(
+          link(
+            rel := "stylesheet",
+            href := "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          )
+        ),
+        body(
+          div(cls := "container")(
+          h1("Create a new auciton"),
+          hr,
+          form(action:= "/luohuutokauppa", method := "post")(
+            div(
+              input(name := "nimi", `type` := "text", placeholder := "Name of the selled goods", width := "50%")
+            ),
+            div(
+              input(name := "aloitushinta", `type` := "Int", placeholder := "Starting Price", width := "50%")
+            ),
+            div(
+              input(name := "suoraosto", `type` := "Int", placeholder := "Direct sell. Put as 0 incase you don't want direct sell", width := "50%")
+            ),
+            input(`type` := "submit", width := "20%")
+          )
+          )
+        )
+      )
+    }
+
+    @cask.postForm("/luohuutokauppa")
+    def luoHuutokauppa(nimi: String, aloitushinta: Int, suoraosto: Int)= {
+      Alusta.luoUusiHuutokauppa(nimi, aloitushinta, suoraosto)
+      cask.Redirect("/")
+    }
 
  initialize()
 

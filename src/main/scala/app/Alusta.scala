@@ -9,7 +9,7 @@ class User(val username: String, spassword: String) {
 }
 
 class Alusta {
-  val kaikkiYksittäiset = Buffer[Yksittäinen]()
+  val kaikkiYksittäiset = Buffer[Huutokauppa]()
   private val käyttäjät = Buffer[User]()
   var kirjautunutKäyttäjä: Option[User] = None
 
@@ -33,20 +33,24 @@ class Alusta {
       false
     }
   }
-  def kirjauduUlos() = {kirjautunutKäyttäjä = None}
+  def kirjauduUlos() = {
+    kirjautunutKäyttäjä = None
+  }
 
-  def luoUusiHuutokauppa(nimi: String, aloitushinta: Int, minNosto: Int, suoraOsto: Int) = {
-    val uusiHuutokauppa = new Huutokauppa(nimi, aloitushinta, minNosto, suoraOsto)
+  def luoUusiHuutokauppa(nimi: String, aloitushinta: Int, suoraOsto: Int) = {
+    val uusiHuutokauppa = new Huutokauppa(nimi, aloitushinta, 1, suoraOsto)
     kaikkiYksittäiset += uusiHuutokauppa
   }
-
+/*
   def luoUusiSuoraosto(nimi: String, hinta: Int) = {
     val uusiSuoraosto = new suoraMyynti(nimi, hinta)
+    kaikkiYksittäiset += uusiSuoraosto
   }
+ */
 }
 sealed abstract class Yksittäinen(val nimi: String) extends Alusta {
   var currentPrice: Int
-  val luoja = kirjautunutKäyttäjä.get.username
+  val luoja = kirjautunutKäyttäjä.map(_.username)
   var currentBuyer: Option[User] = None
   var isExpired = false
 }
@@ -86,11 +90,11 @@ class Huutokauppa(nimi: String, aloitushinta: Int, minNosto: Int, val suoraOsto:
     }
   }
 }
-
+/*
 class suoraMyynti(nimi: String, hinta: Int) extends Yksittäinen(nimi) {
   var currentPrice: Int = hinta
   def osta() = {
     currentBuyer = kirjautunutKäyttäjä
     isExpired = true
   }
-}
+ */
