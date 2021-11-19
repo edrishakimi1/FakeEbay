@@ -26,7 +26,7 @@ class Alusta {
   }
 
   def kirjaudu(hUsername: String, password: String): Boolean = {
-    if (käyttäjäSalasanaMap.get(hUsername) == Some(Hasher(password).sha256)) {
+    if (käyttäjäSalasanaMap.get(hUsername).map(_.hex) == Some(Hasher(password).sha256.hex)) {
       kirjautunutKäyttäjä = käyttäjät.find(_.username==hUsername)
       true
     } else {

@@ -7,40 +7,28 @@ object MinimalApplication extends cask.MainRoutes{
  val Alusta = new Alusta
 
 
-
   @cask.get("/")
   def hello() = {
     html(
-<<<<<<<<< Temporary merge branch 1
       head(if (Alusta.kirjautunutKäyttäjä.isDefined) {
-          p("User: " + Alusta.kirjautunutKäyttäjä.get.username + "   ",
-              a(href := "/kirjauduulos","Log out")
-=========
-      head("Fa$Ebay"),
-      body(
-       h1("Welcome to Fa$Ebay"),
-        if (Alusta.kirjautunutKäyttäjä.isDefined) {
           p("User: " + Alusta.kirjautunutKäyttäjä.get.username,
               a(href := "/kirjauduulos","Kirjaudu ulos")
->>>>>>>>> Temporary merge branch 2
           )
         } else {
           p("You are not logged in.  ",
-              a(href := "/kirjaudusisään","Log in"),
+              a(href := "/login","Log in"),
           p("If you haven't already created an user, ",
-              a(href := "/luouusi", "create it now.")
-            )
-            )
-        }
+              a(href := "/signin", "create it now.")
+          )
+          )
+      }
+        ),
+      body(
+       h1("Welcome to Fa$Ebay"),
+
+
       )
-      , form(action:= "/", method := "post")(
-        select(id:= "korut-valitse", name:="korut"),
-          option("valitse ", value:="")),
-      option("please choose")
-
-      )
-
-
+    )
   }
 
   @cask.get("/kirjauduulos")
@@ -48,29 +36,6 @@ object MinimalApplication extends cask.MainRoutes{
     Alusta.kirjauduUlos()
     cask.Redirect("/")
   }
-
-   @cask.get("/Login")
-  def Login() = {
-      html(
-      head("Login Page"),
-      body(
-    hr,
-
-          div(
-            input(`type` := "text", placeholder := "Username", width := "20%"),
-
-          ),
-
-        div(input(`type` := "text", placeholder := "Pasword", width := "20%"))
-      )
-      )
-  }
-
-  def kirjaudusiään() = {
-    Alusta.kirjaudu("username","password" )
-    cask.Redirect("/")
-  }
-
 
   @cask.get("/Prices")
   def korujentiedot() = {
@@ -82,7 +47,6 @@ object MinimalApplication extends cask.MainRoutes{
        //div(cls := "container")(
           ul(
             listaa.toSeq
-
 
     )
       )
