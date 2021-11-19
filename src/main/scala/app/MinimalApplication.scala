@@ -7,28 +7,40 @@ object MinimalApplication extends cask.MainRoutes{
  val Alusta = new Alusta
 
 
+
   @cask.get("/")
   def hello() = {
     html(
+<<<<<<<<< Temporary merge branch 1
       head(if (Alusta.kirjautunutKäyttäjä.isDefined) {
+          p("User: " + Alusta.kirjautunutKäyttäjä.get.username + "   ",
+              a(href := "/kirjauduulos","Log out")
+=========
+      head("Fa$Ebay"),
+      body(
+       h1("Welcome to Fa$Ebay"),
+        if (Alusta.kirjautunutKäyttäjä.isDefined) {
           p("User: " + Alusta.kirjautunutKäyttäjä.get.username,
               a(href := "/kirjauduulos","Kirjaudu ulos")
+>>>>>>>>> Temporary merge branch 2
           )
         } else {
           p("You are not logged in.  ",
-              a(href := "/login","Log in"),
+              a(href := "/kirjaudusisään","Log in"),
           p("If you haven't already created an user, ",
-              a(href := "/signin", "create it now.")
-          )
-          )
-      }
-        ),
-      body(
-       h1("Welcome to Fa$Ebay"),
-
+              a(href := "/luouusi", "create it now.")
+            )
+            )
+        }
+      )
+      , form(action:= "/", method := "post")(
+        select(id:= "korut-valitse", name:="korut"),
+          option("valitse ", value:="")),
+      option("please choose")
 
       )
-    )
+
+
   }
 
   @cask.get("/kirjauduulos")
@@ -37,61 +49,28 @@ object MinimalApplication extends cask.MainRoutes{
     cask.Redirect("/")
   }
 
-
-  @cask.postForm("/kirjautusisaan")
-  def login(username: String, salansa: String) = {
-    if (Alusta.kirjaudu(username,salansa)) {
-      cask.Redirect("/")
-    } else {
-      cask.Redirect("/loginfailed")
-    }
-  }
-
-  @cask.get("/loginfaileds")
-  def LoginFailed() = {
-      html(
-      head("Login Page"),
-      body(
-    hr,
-        p("This account doesn't exists"),
-        form( action := "/kirjautusisaan", method := "post")(
-          div(
-            input(name:="username", `type` := "text", placeholder := "Username", width := "20%"),
-
-          ),
-
-        div(
-     input(name:= "pasword",`type` := "text", placeholder := "Pasword", width := "20%")
-        ),
-     input(`type` := "submit", width := "20%")
-      )
-      )
-      )
-
-  }
-
-
-   @cask.get("/login")
+   @cask.get("/Login")
   def Login() = {
       html(
       head("Login Page"),
       body(
     hr,
-        form( action := "/kirjautusisaan", method := "post")(
+
           div(
-            input(name:="username", `type` := "text", placeholder := "Username", width := "20%"),
+            input(`type` := "text", placeholder := "Username", width := "20%"),
 
           ),
 
-        div(
-     input(name:= "pasword",`type` := "text", placeholder := "Pasword", width := "20%")
-        ),
-     input(`type` := "submit", width := "20%")
+        div(input(`type` := "text", placeholder := "Pasword", width := "20%"))
       )
       )
-      )
-
   }
+
+  def kirjaudusiään() = {
+    Alusta.kirjaudu("username","password" )
+    cask.Redirect("/")
+  }
+
 
   @cask.get("/Prices")
   def korujentiedot() = {
@@ -103,6 +82,7 @@ object MinimalApplication extends cask.MainRoutes{
        //div(cls := "container")(
           ul(
             listaa.toSeq
+
 
     )
       )
