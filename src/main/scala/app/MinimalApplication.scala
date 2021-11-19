@@ -6,6 +6,9 @@ object MinimalApplication extends cask.MainRoutes{
 
  val Alusta = new Alusta
 
+  @cask.staticFiles("/kuvia")
+  def staticFileRoute() = "kuvat"
+
 
   @cask.get("/")
   def hello() = {
@@ -21,12 +24,17 @@ object MinimalApplication extends cask.MainRoutes{
               a(href := "/signin", "create it now.")
           )
           )
-      }
+      },
+        meta(charset :="UTF-8"),
+        /*link(
+          rel := "stylesheet"
+          */
         ),
       body(
        h2("Welcome to Fa$Ebay"),
         p("All items thatt are currently selling:"),
-        p("placeholder")
+        p("placeholder"),
+        img(src := "/kuvia/ebay.png")
 
 
       )
@@ -65,16 +73,18 @@ object MinimalApplication extends cask.MainRoutes{
         )
       ),
       body(
+        div(cls := "container")(
         h1("Signin Page"),
         hr,
         form(action:= "/AlustaLuoKayttaja", method := "post")(
           div(
-            input(name := "userName", `type` := "text", placeholder := "Username", width := "20%")
+            input(name := "userName", `type` := "text", placeholder := "Username", width := "50%")
           ),
           div(
-            input(name := "password", `type` := "password", placeholder := "Password", width := "20%")
+            input(name := "password", `type` := "password", placeholder := "Password", width := "50%")
           ),
-          input(`type` := "submit", width := "10%")
+          input(`type` := "submit", width := "20%")
+        )
         )
       )
     )
